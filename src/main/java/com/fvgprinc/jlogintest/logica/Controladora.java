@@ -34,7 +34,9 @@ public class Controladora {
                     mensaje = "Usuario y contraseña correctos. Bienvenido /a!";
                 } else {
                     mensaje = "Contraseña incorrecta";
+                    return mensaje;
                 }
+                return mensaje;
             } else {
                 mensaje = "usuario no encontrado";
             }

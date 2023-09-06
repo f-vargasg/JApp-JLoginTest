@@ -9,8 +9,13 @@ import java.util.List;
  * @author garfi
  */
 public class ControladoraPersistencia {
-    UsuarioJpaController usuJpa = new UsuarioJpaController();
+    UsuarioJpaController usuJpa;
 
+    public ControladoraPersistencia() {
+        this.usuJpa = new UsuarioJpaController();
+    }
+   
+    
     public List<Usuario> traerUsuarios() {
         return  usuJpa.findUsuarioEntities();
     }
