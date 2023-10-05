@@ -5,7 +5,6 @@
 package com.fvgprinc.jlogintest.logica;
 
 import com.fvgprinc.jlogintest.persistencia.ControladoraPersistencia;
-import com.fvgprinc.tools.string.MyCommonString;
 import java.util.List;
 
 /**
@@ -20,8 +19,10 @@ public class Controladora {
         controlPersis = new ControladoraPersistencia();
     }
 
-    public String validarUsuario(String usuario, String contrasenia) {
-        String mensaje = MyCommonString.EMPTYSTR;
+    public Usuario validarUsuario(String usuario, String contrasenia) {
+        // String mensaje = MyCommonString.EMPTYSTR;
+        Usuario usr = null;
+        boolean ok = false;
         List<Usuario> listaUsuario = controlPersis.traerUsuarios();
 
         String msgDeb = String.format("Usuario => %s  Contraseña => %s", usuario, contrasenia);
@@ -31,17 +32,21 @@ public class Controladora {
             System.out.println(msgDeb);
             if (usu.getNombreUsuario().equals(usuario)) {
                 if (usu.getContraseia().equals(contrasenia)) {
-                    mensaje = "Usuario y contraseña correctos. Bienvenido /a!";
-                } else {
-                    mensaje = "Contraseña incorrecta";
-                    return mensaje;
+                    usr = usu;
                 }
-                return mensaje;
-            } else {
-                mensaje = "usuario no encontrado";
             }
-        }
-        return mensaje;
+        } 
+        return usr;
     }
+
+    public List<Usuario> traerUsuarios() {
+        return controlPersis.traerUsuarios();
+    }
+
+    public List<Rol> traerRoles() {
+        return controlPersis.traerRoles();
+    }
+
+
 
 }

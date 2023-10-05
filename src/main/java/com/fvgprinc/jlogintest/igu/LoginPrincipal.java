@@ -5,19 +5,22 @@
 package com.fvgprinc.jlogintest.igu;
 
 import com.fvgprinc.jlogintest.logica.Controladora;
+import com.fvgprinc.jlogintest.logica.Usuario;
 import com.fvgprinc.tools.string.MyCommonString;
+import javax.swing.JFrame;
 
 /**
  *
  * @author garfi
  */
-public class Principal extends javax.swing.JFrame {
+public class LoginPrincipal extends javax.swing.JFrame {
+
     Controladora control;
-    
+
     /**
      * Creates new form Principal
      */
-    public Principal() {
+    public LoginPrincipal() {
         initComponents();
         control = new Controladora();
     }
@@ -38,8 +41,8 @@ public class Principal extends javax.swing.JFrame {
         txtContrasenia = new javax.swing.JPasswordField();
         jSeparator1 = new javax.swing.JSeparator();
         jSeparator2 = new javax.swing.JSeparator();
-        btnLogin = new javax.swing.JButton();
-        btnLimpiar = new javax.swing.JButton();
+        jBtnLogin = new javax.swing.JButton();
+        jBtnLimpiar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtMensaje = new javax.swing.JTextArea();
 
@@ -62,19 +65,19 @@ public class Principal extends javax.swing.JFrame {
 
         jSeparator2.setBorder(javax.swing.BorderFactory.createCompoundBorder());
 
-        btnLogin.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnLogin.setText("Login");
-        btnLogin.addActionListener(new java.awt.event.ActionListener() {
+        jBtnLogin.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jBtnLogin.setText("Login");
+        jBtnLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLoginActionPerformed(evt);
+                jBtnLoginActionPerformed(evt);
             }
         });
 
-        btnLimpiar.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnLimpiar.setText("Limpiar");
-        btnLimpiar.addActionListener(new java.awt.event.ActionListener() {
+        jBtnLimpiar.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jBtnLimpiar.setText("Limpiar");
+        jBtnLimpiar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLimpiarActionPerformed(evt);
+                jBtnLimpiarActionPerformed(evt);
             }
         });
 
@@ -112,9 +115,9 @@ public class Principal extends javax.swing.JFrame {
                                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 352, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(95, 95, 95)
-                                .addComponent(btnLogin)
+                                .addComponent(jBtnLogin)
                                 .addGap(56, 56, 56)
-                                .addComponent(btnLimpiar)))
+                                .addComponent(jBtnLimpiar)))
                         .addGap(0, 39, Short.MAX_VALUE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
@@ -136,8 +139,8 @@ public class Principal extends javax.swing.JFrame {
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnLimpiar)
-                    .addComponent(btnLogin))
+                    .addComponent(jBtnLimpiar)
+                    .addComponent(jBtnLogin))
                 .addGap(18, 18, 18)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 8, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -148,26 +151,46 @@ public class Principal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
+    private void jBtnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnLimpiarActionPerformed
         txtUsuario.setText(MyCommonString.EMPTYSTR);
         txtContrasenia.setText(MyCommonString.EMPTYSTR);
         txtMensaje.setText(MyCommonString.EMPTYSTR);
-    }//GEN-LAST:event_btnLimpiarActionPerformed
+    }//GEN-LAST:event_jBtnLimpiarActionPerformed
 
-    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-    
+    private void jBtnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnLoginActionPerformed
+
+        JFrame jfrm = null;
         String usuario = txtUsuario.getText();
         String contrasenia = txtContrasenia.getText();
-        String mensaje = control.validarUsuario(usuario, contrasenia);
-        
-        txtMensaje.setText(mensaje);
-        
-    }//GEN-LAST:event_btnLoginActionPerformed
+        Usuario usr = control.validarUsuario(usuario, contrasenia);
 
-    
+        if (usr != null) {
+            String rol = usr.getUnRol().getNombreRol();
+            if (rol.equals("admin")) {
+                PrincipalAdmin pAdmin = new PrincipalAdmin(control, usr);
+                jfrm = pAdmin;
+            }
+            if (rol.equals("user")) {
+                PrincipalUser pUser = new PrincipalUser(control, usr );
+                jfrm =pUser;
+            }
+            if (jfrm != null) {
+                jfrm.setVisible(true);
+                jfrm.setLocationRelativeTo(null);
+            }
+
+            this.dispose();
+        } else {
+            txtMensaje.setText("Usuario o contraseña incorrecta");
+        }
+
+
+    }//GEN-LAST:event_jBtnLoginActionPerformed
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnLimpiar;
-    private javax.swing.JButton btnLogin;
+    private javax.swing.JButton jBtnLimpiar;
+    private javax.swing.JButton jBtnLogin;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

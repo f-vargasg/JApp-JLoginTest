@@ -3,6 +3,7 @@
   <persistence-unit name="loginPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>com.fvgprinc.jlogintest.logica.Usuario</class>
+    <class>com.fvgprinc.jlogintest.logica.Rol</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:sqlite:C:\Users\garfi\OneDrive\Documentos\MyProyects\SqlLite\login.db"/>
       <property name="javax.persistence.jdbc.user" value=""/>

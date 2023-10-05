@@ -1,6 +1,6 @@
 package com.fvgprinc.jlogintest;
 
-import com.fvgprinc.jlogintest.igu.Principal;
+import com.fvgprinc.jlogintest.igu.LoginPrincipal;
 
 /**
  *
@@ -9,7 +9,7 @@ import com.fvgprinc.jlogintest.igu.Principal;
 public class JloginTest {
 
     public static void main(String[] args) {
-        Principal  princ = new Principal();
+        LoginPrincipal  princ = new LoginPrincipal();
         
         princ.setLocationRelativeTo(null);
         princ.setVisible(true);

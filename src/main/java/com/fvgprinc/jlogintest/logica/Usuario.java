@@ -6,6 +6,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
 
 /**
  *
@@ -59,6 +62,35 @@ public class Usuario implements Serializable {
     public void setContraseia(String contraseia) {
         this.contraseia = contraseia;
     }
+    
+    @ManyToOne
+    @JoinColumn(name = "fk_rol")
+    Rol unRol;
+
+    public Rol getUnRol() {
+        return unRol;
+    }
+
+    public void setUnRol(Rol unRol) {
+        this.unRol = unRol;
+    }
+
+    public Usuario() {
+    }
+
+    public Usuario(int id, String nombreUsuario, String contraseia, Rol unRol) {
+        this.id = id;
+        this.nombreUsuario = nombreUsuario;
+        this.contraseia = contraseia;
+        this.unRol = unRol;
+    }
+    
+    
+    
+    
+    
+    
+    
     
     
 
