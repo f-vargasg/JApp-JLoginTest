@@ -1,9 +1,10 @@
-
 package com.fvgprinc.jlogintest.igu;
 
 import com.fvgprinc.jlogintest.logica.Controladora;
 import com.fvgprinc.jlogintest.logica.Usuario;
 import java.util.List;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -13,20 +14,20 @@ import javax.swing.table.DefaultTableModel;
 public class PrincipalAdmin extends javax.swing.JFrame {
 
     private Controladora control;
-    private Usuario usr; 
+    private Usuario usr;
+
     /**
      * Creates new form PrincipalAdmin
      */
     public PrincipalAdmin() {
         initComponents();
     }
-    
+
     public PrincipalAdmin(Controladora pControl, Usuario pUser) {
         initComponents();
         this.control = pControl;
         this.usr = pUser;
     }
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -81,12 +82,27 @@ public class PrincipalAdmin extends javax.swing.JFrame {
 
         jBtnEditar.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jBtnEditar.setText("Editar Usuario");
+        jBtnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnEditarActionPerformed(evt);
+            }
+        });
 
         jBtnBorrar.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jBtnBorrar.setText("Borrar Usuario");
+        jBtnBorrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnBorrarActionPerformed(evt);
+            }
+        });
 
         jBtnRecargar.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jBtnRecargar.setText("Recargar Tabla");
+        jBtnRecargar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnRecargarActionPerformed(evt);
+            }
+        });
 
         jBtnSalir.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jBtnSalir.setText("Salir");
@@ -174,24 +190,22 @@ public class PrincipalAdmin extends javax.swing.JFrame {
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
-
         };
 
         String[] titulos = {"Id", "Nom.Usuario", "Rol"};
         modeloTabla.setColumnIdentifiers(titulos);
-        
+
         jTablaUsuarios.setModel(modeloTabla);
-        
+
         // Traer de la BD la lista de usuarios
         List<Usuario> listaUsuarios = control.traerUsuarios();
-        
+
         if (listaUsuarios != null) {
             for (Usuario usu : listaUsuarios) {
                 Object[] objeto = {usu.getId(), usu.getNombreUsuario(), usu.getUnRol().getNombreRol()};
                 modeloTabla.addRow(objeto);
             }
         }
-        
 
     }
     private void jBtnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnSalirActionPerformed
@@ -202,10 +216,54 @@ public class PrincipalAdmin extends javax.swing.JFrame {
         AltaUsuarios altaUsu = new AltaUsuarios(control);
         altaUsu.setVisible(true);
         altaUsu.setLocationRelativeTo(null);
-        this.dispose();
+        // this.dispose();
     }//GEN-LAST:event_jBtnNuevoUsuarioActionPerformed
 
-    
+    private void jBtnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnBorrarActionPerformed
+        // validar primero que la celda tenga filas
+        if (jTablaUsuarios.getRowCount() > 0) {
+            // que se haya seleccionado un elemento
+            if (jTablaUsuarios.getSelectedRow() != -1) {
+                // obtener el id del elemento a elminar
+                int idUsuario = Integer.parseInt(String.valueOf(jTablaUsuarios.getValueAt(jTablaUsuarios.getSelectedRow(), 0)));
+                // borrar
+                control.borrarUsuario(idUsuario);
+                Dialogos.mostrarMensaje("Se borrró el usuario correctamente", Dialogos.TD_INFO, "Eliminación");
+                // avisar al usuario que se eliminó el registro
+                cargarTabla();
+            } else {
+                Dialogos.mostrarMensaje("No seleccionó ningún registro", Dialogos.TD_ERROR, "Eliminación");
+            }
+        } else {
+            Dialogos.mostrarMensaje("La tabla está vacía", Dialogos.TD_ERROR, "Eliminación");
+        }
+    }//GEN-LAST:event_jBtnBorrarActionPerformed
+
+    private void jBtnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnEditarActionPerformed
+        // validar primero que la celda tenga filas
+        if (jTablaUsuarios.getRowCount() > 0) {
+            // que se haya seleccionado un elemento
+            if (jTablaUsuarios.getSelectedRow() != -1) {
+                // obtener el id del elemento a elminar
+                int idUsuario = Integer.parseInt(String.valueOf(jTablaUsuarios.getValueAt(jTablaUsuarios.getSelectedRow(), 0)));
+                // Editar Registro  (Ventana de edición)
+                EdicionUsuarios pantallaEdic = new  EdicionUsuarios(control,  idUsuario);
+                pantallaEdic.setVisible(true);
+                pantallaEdic.setLocationRelativeTo(this);
+                
+
+            } else {
+                Dialogos.mostrarMensaje("No seleccionó ningún registro", Dialogos.TD_ERROR, "Edición");
+            }
+        } else {
+            Dialogos.mostrarMensaje("La tabla está vacía", Dialogos.TD_ERROR, "Edición");
+        }
+    }//GEN-LAST:event_jBtnEditarActionPerformed
+
+    private void jBtnRecargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnRecargarActionPerformed
+        cargarTabla();
+    }//GEN-LAST:event_jBtnRecargarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBtnBorrar;
@@ -220,5 +278,4 @@ public class PrincipalAdmin extends javax.swing.JFrame {
     private javax.swing.JTextField jTxtNombreUser;
     // End of variables declaration//GEN-END:variables
 
-    
 }
